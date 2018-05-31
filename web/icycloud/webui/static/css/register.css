@@ -1,0 +1,13 @@
+.form-father {
+	clear:both;overflow:hidden;
+	width:50%;
+}
+.form-control {
+	float:left;
+}
+.white-div {
+	background-color:#FFF;
+}
+.mt20 {
+	margin-top:20px;
+}

@@ -1,0 +1,25 @@
+{%extends "webui/base.html"%}
+{% block css %}
+<link href="/static/css/register.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron white-div">
+  </br>
+  </br>
+<center>
+  <h1>登陆</h1>
+  <form class="form-father" action='' method='post'>
+	  <div class="form-group">
+	      <input type="text" name="username" class="form-control" id="exampleInput" placeholder="Username">
+	      <input type="password" name="password" class="form-control mt20"  placeholder="密码">
+	     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+	     <input type="hidden" name="next" value="{{ next }}">
+             <!--p><input type="submit" class="btn btn-primary btn-lg wid40 mt20 "></input></p-->
+             		<button type="submit" class="btn btn-default wid40 mt20">登入</button>
+			<a href="/register"><button type="button" class="btn btn-default wid40 mt20" data-dismiss="modal">去注册</button></a>
+	  </div>
+  </form>
+
+</center>
+{% endblock %}

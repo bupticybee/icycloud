@@ -1,0 +1,55 @@
+{%extends "webui/base.html"%}
+{% block css %}
+<link href="/static/css/register.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron white-div">
+  </br>
+  </br>
+<center>
+  <h1>注册</h1>
+  <form class="form-father" action='/register_api' method='post'>
+	  <div class="form-group">
+	    <div class="input-group mt20">
+	      <input type="text" name="username" class="form-control" id="exampleInput" placeholder="Username(只包含小写字母,数字和'-')">
+		<div class="input-group-addon">
+			.cloud.icybee.cn
+		</div>
+	    </div>
+	      <input type="password" name="password" class="form-control mt20"  placeholder="密码(长度大于8)">
+	      <input type="password" name="repassword" class="form-control mt20"  placeholder="再次输入密码">
+	      <input type="email" name="email" class="form-control mt20"  placeholder="邮箱">
+	     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+	     <input type="hidden" name="invitecode" value="{{ invitecode }}">
+             <p><input type="submit" class="btn btn-primary btn-lg wid40 mt20 "></input></p>
+	  </div>
+  </form>
+
+</center>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).on('submit', '.form-father', function(){
+$.ajax({ 
+    type: $(this).attr('method'), 
+    url: this.action, 
+    data: $(this).serialize(),
+    context: this,
+    success: function(data, status) {
+        if(data.result == 'success'){
+            alert('注册完成')
+            window.location.href='/console';
+        }else{
+            alert(data.errmsg)
+        }
+    },
+    err: function(){
+        alert('request failed')
+    }
+    });
+    return false;
+});
+</script>
+{% endblock %}

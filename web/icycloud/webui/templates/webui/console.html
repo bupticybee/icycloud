@@ -1,0 +1,125 @@
+{%extends "webui/base.html"%}
+{% block css %}
+<link href="/static/css/console.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<<center>
+<div class="row col-md-12 ct">
+
+         <div class="col-md-2">
+		<ul class="nav nav-list">
+		    <li><a href="#" class="active">虚拟主机</a></li>
+		    <li><a href="#" class="">域名管理(开发中)</a></li>
+		    <li><a href="/">帮助文档</a></li>
+		</ul>
+         </div>
+         <div class="col-md-9">
+		<button type="button" class="btn btn-primary btn-xs but-lf" data-toggle="modal" data-target="#myModal" {% if disabled %} disabled="disabled" {% endif %}>(+)新建机器</button>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">创建机器</h4>
+		      </div>
+		      <div class="modal-body">
+  <form class="form-father" action='/create_machine' method='post'>
+	  <div class="form-group">
+	      <!--input type="password" name="password" class="form-control mt20"  placeholder="密码(长度大于8)">
+	      <input type="password" name="repassword" class="form-control mt20"  placeholder="再次输入密码">
+	      <input type="email" name="email" class="form-control mt20"  placeholder="邮箱"-->
+
+<h3>
+操作系统
+</h3>
+<div class="btn-group" data-toggle="buttons">
+   <label class="btn btn-primary active">
+      <input type="radio" name="os" id="option1" value="ubuntu 14.04" checked="true">ubuntu 14.04
+   </label>
+   <label class="btn btn-primary">
+      <input type="radio" name="os" id="option2" value="ubuntu 12.04" readonly="true">ubuntu 12.04
+   </label>
+</div>	
+
+<br/>
+<h3>
+配置
+</h3>
+<div class="btn-group" data-toggle="buttons">
+   <label class="btn btn-primary active">
+      <input type="radio" name="setting" id="option1" value="default" checked="true">默认配置
+   </label>
+</div>	
+<h3>
+配置root密码
+</h3>
+<input id="password" type="password" name="password" class="form-control mt30 wi40"  placeholder="密码(长度大于6)">
+<input id="repassword" type="password" name="repassword" class="form-control mt30 wi40"  placeholder="再次输入密码">
+
+	     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+		      <div class="modal-footer mt30">
+             		<button type="submit" class="btn btn-default">创建</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		      </div>
+	  </div>
+  </form>
+
+                       
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<table class="table table-bordered table-hover mt10">
+			<tr>
+			<th>机器内网ip</th>
+			<th>机器外网ip</th>
+			<th>机器状态</th>
+			<th>绑定域名</th>
+			<th>操作</th>
+			</tr>
+			{% if not machines %}
+			<tr>
+			<td>无</td>
+			<td>无</td>
+			<td>无机器</td>
+			<td>无</td>
+			<td>无</td>
+			</tr>
+			{% endif %}
+			{% for machine in machines %}
+			<tr>
+			<td>{{machine.machineip}}</td>
+			<td>无</td>
+			<td>{{machine.machinestatus}}</td>
+			<td>{{machine.bindurl}}</td>
+			<td>开发中</td>
+			</tr>
+			{% endfor %}
+		</table>
+         </div>
+</div>
+</center>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript"> 
+$(document).ready(function(){ 
+    $(":submit").click(function(check){ 
+        var val = $("#password").val(); 
+        var reval = $("#repassword").val(); 
+        if(val=="" || val.length < 6){ 
+            alert("密码不合法,长度需要大于6"); 
+            $(":text[id=test]").focus(); 
+            check.preventDefault();//此处阻止提交表单 
+        } 
+        if(val!=reval){ 
+            alert("两次输入密码不一致"); 
+            $(":text[id=test]").focus(); 
+            check.preventDefault();//此处阻止提交表单 
+        } 
+    }); 
+}); 
+</script> 
+{% endblock %}
