@@ -1,0 +1,3 @@
+#!/bin/bash
+/sbin/chgpasswd.sh
+/sbin/my_init $@
