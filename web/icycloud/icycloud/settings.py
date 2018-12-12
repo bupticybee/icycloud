@@ -14,7 +14,7 @@ import os
 import djcelery
 djcelery.setup_loader()
 BROKER_URL = 'amqp://'
-
+CELERY_RESULT_BACKEND = 'amqp://'
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -32,7 +32,7 @@ SECRET_KEY = 'thxfskdd+kgxi48e(z&&+p8^^u+plq-5dst7$t)a$&iug82+ny'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cloud.sample.com'] # 这里需要添加上自己的域名
 
 
 # Application definition

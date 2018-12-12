@@ -19,11 +19,16 @@ class Machine(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=False)
     dockerid = models.CharField(max_length=255,null=True)
     status = models.CharField(max_length=1,choices=MAYBECHOICE,default='C',null=False,blank=False)
-    
+
 class InviteCode(models.Model):
-    code = models.CharField(max_length=20,primary_key=True)
-    used = models.BooleanField(null=False,default=False)
-    
+    code = models.CharField(max_length=20,primary_key=True,verbose_name='InvitieCode')
+    used = models.BooleanField(null=False,default=False,verbose_name='Used')
+
+    class Mate:
+        verbose_name_plural='InviteCode'
+        verbose_name='Invite'
+
+
 class Router(models.Model):
     url = models.CharField(max_length=255,primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=False)

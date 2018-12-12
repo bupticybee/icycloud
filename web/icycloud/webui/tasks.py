@@ -39,7 +39,7 @@ def createMachine(username,osname,password):
 	machineobj.save()
 
 	# url routing
-	url = username + '.cloud.icybee.cn'
+	url = username + '.cloud.sample.com'
 	if Router.objects.filter(url=url):
 		print 'url already routed'
 		return 
