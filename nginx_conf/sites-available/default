@@ -22,116 +22,43 @@ upstream django_8080 {
 
 server {
 	listen 80;
-	server_name cloud.icybee.cn;
+	server_name cloud.sample.com;
 	charset utf-8;
 	location / {
 		uwsgi_pass  django_8080;
-		include /online/icycloud/web/icycloud/uwsgi_params;
+		include uwsgi_params;
 	}
+	location /static {
+        expires 30d;
+        autoindex on;
+        add_header Cache-Control private;
+        alias /var/www/icloud/web/icycloud/webui/static/;
+		## 为了保证 django能够使用管理页面,还需要对一些admin的静态文件进行软连接
+		## 我是在 static/admin -> /usr/local/lib/python2.7/dist-packages/django/contrib/admin/static/admin/
+    }
 }
 
 server {
 	listen   80; ## listen for ipv4; this line is default and implied
 	#listen   [::]:80 default ipv6only=on; ## listen for ipv6
 
-	root /usr/share/nginx/www;
-	server_name *.cloud.icybee.cn;
+	server_name *.cloud.sample.com;
 	index index.html index.htm;
 
 	# Make site accessible from http://localhost/
 	server_name localhost;
 
 	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to index.html
-		#try_files $uri $uri/ /index.html;
-		# Uncomment to enable naxsi on this location
-		# include /etc/nginx/naxsi.rules
-		auth_request http://127.0.0.1:8800;
-		set $url http://172.17.0.3;
-		proxy_pass  $url;
-	}
-
-	location /doc/ {
-		alias /usr/share/doc/;
-		autoindex on;
-		allow 127.0.0.1;
-		deny all;
-	}
-
-	# Only for nginx-naxsi : process denied requests
-	#location /RequestDenied {
-		# For example, return an error code
-		#return 418;
-	#}
-
-	#error_page 404 /404.html;
-
-	# redirect server error pages to the static page /50x.html
-	#
-	#error_page 500 502 503 504 /50x.html;
-	#location = /50x.html {
-	#	root /usr/share/nginx/www;
-	#}
-
-	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-	#
-	#location ~ \.php$ {
-	#	fastcgi_split_path_info ^(.+\.php)(/.+)$;
-	#	# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
-	#
-	#	# With php5-cgi alone:
-	#	fastcgi_pass 127.0.0.1:9000;
-	#	# With php5-fpm:
-	#	fastcgi_pass unix:/var/run/php5-fpm.sock;
-	#	fastcgi_index index.php;
-	#	include fastcgi_params;
-	#}
-
-	# deny access to .htaccess files, if Apache's document root
-	# concurs with nginx's one
-	#
-	#location ~ /\.ht {
-	#	deny all;
-	#}
+		# 使用这种方式就可以不用自己编译模块了,原生的就可以了
+		# 当然这个路由就别用了(我已经这么长了,应该不会被用了吧)
+        auth_request /route-proxy-not-use-this-url;
+        auth_request_set  $url $sent_http_url;
+        proxy_pass  $url;
+    }
+    location /route-proxy-not-use-this-url {
+            proxy_pass http://127.0.0.1:8800/auth;
+            proxy_pass_request_body off;
+            proxy_set_header Content-Length "";
+            proxy_set_header X-Original-HOST $http_host;
+    }
 }
-
-
-# another virtual host using mix of IP-, name-, and port-based configuration
-#
-#server {
-#	listen 8000;
-#	listen somename:8080;
-#	server_name somename alias another.alias;
-#	root html;
-#	index index.html index.htm;
-#
-#	location / {
-#		try_files $uri $uri/ /index.html;
-#	}
-#}
-
-
-# HTTPS server
-#
-#server {
-#	listen 443;
-#	server_name localhost;
-#
-#	root html;
-#	index index.html index.htm;
-#
-#	ssl on;
-#	ssl_certificate cert.pem;
-#	ssl_certificate_key cert.key;
-#
-#	ssl_session_timeout 5m;
-#
-#	ssl_protocols SSLv3 TLSv1;
-#	ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
-#	ssl_prefer_server_ciphers on;
-#
-#	location / {
-#		try_files $uri $uri/ /index.html;
-#	}
-#}

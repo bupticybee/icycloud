@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,request
 from flask import make_response
 import MySQLdb
 import traceback
@@ -17,8 +17,9 @@ def get_ip_from_address(address):
     print ip
     return str(ip)
 
-@app.route('/auth/<address>')
-def get_route(address):
+@app.route('/auth')
+def get_route():
+    address = request.headers.get('X-Original-HOST').rstrip('.') # ICP都懂都懂
     print address
     # check address
     for i in address:
