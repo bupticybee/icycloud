@@ -37,7 +37,7 @@ pip install wusgi
 pip install flask
 ```
 
-然后是我因为菜不得不使用的
+然后是安装screen
 
 ```bash
 apt install screen
@@ -75,7 +75,7 @@ python manage.py createsuperuser
 
 开一个screen,运行`sudo -u icycloud python manage.py celery worker -c 4 --loglevel=info`
 
-进入 `router` 路径 再开一个screen(原谅我太菜了) 运行 `python router.py`
+进入 `router` 路径 再开一个screen运行 `python router.py`
 
 把nginx的配置文件放到他可以生效的位置,重启nginx
 
